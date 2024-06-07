@@ -39,12 +39,14 @@ class Warehousing(models.Model):
     warehousing_quantity = models.IntegerField(default = 0)
     warehousing_until = models.DateTimeField(default = timezone.now)
     warehousing_price = models.IntegerField(default =0)
+    warehouse = models.ForeignKey(Warehouse,on_delete=models.CASCADE,db_column='warehouse_id')
 
 class Shipping(models.Model):
     shipping_id = models.BigAutoField(primary_key=True)
     shipping_time = models.DateTimeField(default = timezone.now)
     shipping_quantity = models.IntegerField(default = 0)
     shipping_price = models.IntegerField(default=0)
+    barcode = models.ForeignKey(Barcode,on_delete=models.CASCADE,db_column='barcode_id')
 
 
 class Inventory(models.Model):
@@ -53,7 +55,7 @@ class Inventory(models.Model):
     warehousing = models.ForeignKey(Warehousing,on_delete=models.CASCADE,db_column = 'warehousing_id')
     inventory_expiration = models.DateField(default= timezone.now)
     warehouse = models.ForeignKey(Warehouse,on_delete=models.CASCADE,db_column='warehouse_id')
-    fruit_id = models.ForeignKey(Fruit, on_delete=models.CASCADE,db_column='fruit_id')
+    fruit = models.ForeignKey(Fruit, on_delete=models.CASCADE,db_column='fruit_id')
     # def put_expiration(self):
     #   self.inventory_expiration = datetime.now().date() + timedelta(days=self.fruit.id.fruit_day_plus)
 

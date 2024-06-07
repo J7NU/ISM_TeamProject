@@ -13,9 +13,9 @@
                 <tbody>
                   {% for inventories in inventories %}
                   <tr>
-                    <td>{{ inventories.warehouse_id.warehouse_name }}</td>
-                    <td>{{ inventories.fruit_id.fruit_name}}</td>
-                    <td>{{ inventories.warehousing_id.warehousing_time}}</td>
+                    <td>{{ inventories.warehouse.warehouse_name }}</td>
+                    <td>{{ inventories.fruit.fruit_name}}</td>
+                    <td>{{ inventories.warehousing.warehousing_time}}</td>
                     <td>{{ inventories.inventory_expiration }}</td>
                     <td>{{ inventories.inventory_quantity}}</td>
                     <td>

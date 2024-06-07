@@ -19,7 +19,8 @@
                           <div class="card-body">
                             <h3><b>상품 입고하기</b></h3>
                                 <!--if 조회된 상품이 없음-->
-                                <form method="post" class="my-3">
+                                <form method="POST" class="my-3">
+                                    {% csrf_token %}
                                   <div class="row g-3 align-items-center mb-3">
                                     <div class="col-auto">
                                       <label for="barcodeInput" class="col-form-label"><b>바코드</b></label>
@@ -46,13 +47,16 @@
                                   <option value="yongin-ref">용인 냉장창고</option>
                                   <option value="seoul-fro">서울 냉동창고</option>
                                 </select>
-                                <form method="post" class="py-1">
+
+                                <form method="POST" class="py-1">
+                                    {% csrf_token %}
                                   <div class="row g-3 align-items-center mb-3">
                                     <div class="col-auto">
                                       <label for="inbound-time" class="form-label"><b>입고 시각</b></label>
                                     </div>
                                     <div class="col-auto">
-                                      <input type="datetime-local" name="inbound-time" id="inbound-time" class="form-control">
+                                      <input type="datetime-local" name="warehousing_time" id="{{ form.warehousing_time }}" class="form-control">
+                                        {{ form.warehousing_time }}
                                     </div> 
                                   </div>
                                   <div class="row g-3 align-items-center mb-3">
@@ -60,7 +64,8 @@
                                       <label for="inbound-quantity" class="form-label"><b>입고 수량</b></label>
                                     </div>
                                     <div class="col-auto">
-                                      <input type="number" name="inbound-quantity" id="inbound-quantity" class="form-control">
+                                      <input type="number" name="inbound-warehousing_quantity" id="{{ form.warehousing_quantity }}" class="form-control">
+                                        {{ form.warehousing_quantity }}
                                     </div>
                                     <div class="col-auto">
                                       <span id="passwordHelpInline" class="form-text">
@@ -73,7 +78,8 @@
                                       <label for="inbound-price" class="form-label"><b>입고 가격</b></label>
                                     </div>
                                     <div class="col-auto">
-                                      <input type="number" name="inbound-price" id="inbound-price" class="form-control">
+                                      <input type="number" name="warehousing_price" id="{{ form.warehousing_price }}" class="form-control">
+                                        {{ form.warehousing_price }}
                                     </div> 
                                   </div>
                                   <div class="d-flex flex-row-reverse">
@@ -119,12 +125,12 @@
                               {% for inventory in inventories %}
                               <tr>
                                 <th>{{ inventory.warehousing_id}}</th>
-                                <th>{{ inventory.fruit_id.fruit_name}}</th>
+                                <th>{{ inventory.fruit.fruit_name}}</th>
                                 <th>{{ inventory.warehouse_id }}</th>
-                                <th>{{ inventory.warehousing_id.warehousing_time }}</th>
+                                <th>{{ inventory.warehousing.warehousing_time }}</th>
                                 <th>{{ inventory.inventory_expiration }}</th>
-                                <th>{{ inventory.warehousing_id.warehousing_price }}</th>
-                                <th>{{ inventory.warehousing_id.warehousing_quantity }}</th>
+                                <th>{{ inventory.warehousing.warehousing_price }}</th>
+                                <th>{{ inventory.warehousing.warehousing_quantity }}</th>
                                 <th><a href="{% url 'warehousing_edit' inventory.warehousing_id %}" class="btn btn-outline-primary ">Edit</a></th>
 
                                 <th><a href="" class="btn btn-outline-danger ">delete</a></th>

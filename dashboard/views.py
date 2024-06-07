@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.template import loader
 from .models import Fruit,Origin,Inventory,Warehousing,Shipping,Warehouse, User, Barcode
 from .forms import FruitForm,OriginForm,InventoryForm,WarehousingForm,ShippingForm,WarehouseForm, UserForm, BarcodeForm
-
+from django.contrib import messages
 
 from .api import kamis
 
@@ -33,8 +33,8 @@ def inventory(request):
 
 def inventory_details(request):
     inventories = Inventory.objects.get(id=id)
-    form = InventoryForm(request.POST or None, instance = inventory)
-    return render(request, 'inventory/inventory_item_detail.html',{'form': inventories})
+    form = InventoryForm(request.POST or None, instance = inventories)
+    return render(request, 'inventory/inventory_item_detail.html',{'form': form})
 
 
 def product_setting(request):
@@ -53,13 +53,20 @@ def warehousing(request):
     return render(request, "warehousing/warehousing.html",context)
 
 
-def warehousing_edit(request,id):
+# def create_warehousing(request):
+#     form = WarehousingForm(request.POST or None)
+#     if form.is_valid():
+#         form.save()
+#         return redirect("warehousing")
+#     return render(request,"warehousing/warehousing_form.html",{'form':form})
+
+def warehousing_edit(request, id):
     warehousings = Warehousing.objects.get(warehousing_id=id)
     form = WarehousingForm(request.POST or None, instance=warehousings)
     if form.is_valid():
         form.save()
+        messages.success(request, '입고 정보가 수정되었습니다.')
         return redirect('warehousing')
-
     return render(request, "warehousing/warehousing_edit.html",{'form':form,'warehousings':warehousings})
 def warehouseing_delete(request,id):
     warehousings = Warehousing.objects.get(id=id)
@@ -77,8 +84,14 @@ def shipping(request):
     return render(request, "shipping/shipping.html",context)
 
 
-def shipping_edit(request):
-    return render(request, "shipping/shipping_edit.html")
+def shipping_edit(request,id):
+    shippings = Shipping.objects.get(shipping_id=id)
+    form = ShippingForm(request.POST or None, instance=shippings)
+    if form.is_valid():
+        form.save()
+        messages.success(request, '입고 정보가 수정되었습니다.')
+        return redirect('shipping')
+    return render(request, "shipping/shipping_edit.html",{'form': form, 'shippings':shippings})
 
 
 def warehouse(request):

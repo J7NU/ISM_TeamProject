@@ -115,16 +115,18 @@
                               </tr>
                             </thead>
                             <tbody>
+                            {% for shipping in shippings %}
                               <tr>
-                                <th>24050001</th>
-                                <th>중품 사과</th>
-                                <th>0000000000</th>
-                                <th>2024-05-08</th>
-                                <th>24,000</th>
-                                <th>300박스</th>
+                                <th>{{ shipping.shipping_id }}</th>
+                                <th>{{ shipping.barcode.fruit.fruit_name}}</th>
+                                <th>{{ shipping.barcode_id }}</th>
+                                <th>{{ shipping.shipping_time }}</th>
+                                <th>{{ shipping.shipping_price}}</th>
+                                <th>{{ shipping.shipping_quantity }}</th>
                                 <th><a href="/shipping/edit/1" class="btn btn-outline-primary ">Edit</a></th>
                                 <th><a href="" class="btn btn-outline-danger ">delete</a></th>
                               </tr>
+                            {% endfor %}
                             </tbody>
                           </table>
                         </div>

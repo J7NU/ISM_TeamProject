@@ -23,13 +23,13 @@ class InventoryForm(forms.ModelForm):
 class WarehousingForm(forms.ModelForm):
     class Meta:
         model = Warehousing
-        fields = '__all__'
+        fields = ['warehousing_time','warehousing_quantity','warehousing_price','warehousing_id']
 
 
 class ShippingForm(forms.ModelForm):
     class Meta:
         model = Shipping
-        fields = '__all__'
+        fields = ['shipping_price','shipping_quantity','shipping_time',"shipping_id"]
 
 
 class WarehouseForm(forms.ModelForm):

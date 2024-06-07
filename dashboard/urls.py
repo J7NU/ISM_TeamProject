@@ -11,7 +11,7 @@ urlpatterns = [
     path("warehousing/edit/<int:id>", views.warehousing_edit, name="warehousing_edit"),
 
     path("shipping", views.shipping, name="shipping"),
-    path("shipping/edit/1", views.shipping_edit, name="shipping_edit"),
+    path("shipping/edit/<int:id>", views.shipping_edit, name="shipping_edit"),
     
     path("warehouse", views.warehouse, name="warehouse"),
     path("warehouse/1", views.warehouse_detail, name="warehouse_detail"),
