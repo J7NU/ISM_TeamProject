@@ -116,17 +116,20 @@
                               </tr>
                             </thead>
                             <tbody>
+                              {% for inventory in inventories %}
                               <tr>
-                                <th>24050001</th>
-                                <th>중품 사과</th>
-                                <th>0000000000</th>
-                                <th>2024-05-08</th>
-                                <th>2024-06-30</th>
-                                <th>24,000</th>
-                                <th>300박스</th>
-                                <th><a href="warehousing/edit/1" class="btn btn-outline-primary ">Edit</a></th>
+                                <th>{{ inventory.warehousing_id}}</th>
+                                <th>{{ inventory.fruit_id.fruit_name}}</th>
+                                <th>{{ inventory.warehouse_id }}</th>
+                                <th>{{ inventory.warehousing_id.warehousing_time }}</th>
+                                <th>{{ inventory.inventory_expiration }}</th>
+                                <th>{{ inventory.warehousing_id.warehousing_price }}</th>
+                                <th>{{ inventory.warehousing_id.warehousing_quantity }}</th>
+                                <th><a href="{% url 'warehousing_edit' inventory.warehousing_id %}" class="btn btn-outline-primary ">Edit</a></th>
+
                                 <th><a href="" class="btn btn-outline-danger ">delete</a></th>
                               </tr>
+                            {% endfor %}
                             </tbody>
                           </table>
                         </div>

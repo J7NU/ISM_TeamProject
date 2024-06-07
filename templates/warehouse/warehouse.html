@@ -77,7 +77,7 @@
                         <div class="card-body">
                           <h3><b>창고 리스트</b></h3>
                           <table class="table">
-                            <thead>
+
                               <tr>
                                 <th>창고번호</th>
                                 <th>창고이름</th>
@@ -87,18 +87,19 @@
                                 <th>수정</th>
                                 <th>삭제</th>
                               </tr>
-                            </thead>
-                            <tbody>
+
+                                {%  for warehouse in warehouses %}
                               <tr>
-                                <th>24050001</th>
-                                <th>00창고</th>
-                                <th>경기도 용인시 처인구 모현읍 00로 00</th>
-                                <th>30CBM</th>
-                                <th><a href="warehouse/1" class="btn btn-outline-success">Detail</a></th>
-                                <th><a href="warehouse/1/edit" class="btn btn-outline-primary ">Edit</a></th>
-                                <th><a href="" class="btn btn-outline-danger ">delete</a></th>
+                                <td>{{ warehouse.warehouse_id }}</td>
+                                <td>{{ warehouse.warehouse_name }}</td>
+                                <td>{{ warehouse.warehouse_address }}</td>
+                                <td>{{ warehouse.warehouse_capacity }}</td>
+                                <td><a href="warehouse/1" class="btn btn-outline-success">Detail</a></td>
+                                <td><a href="warehouse/1/edit" class="btn btn-outline-primary ">Edit</a></td>
+                                <td><a href="" class="btn btn-outline-danger ">delete</a></td>
                               </tr>
-                            </tbody>
+
+                                {% endfor %}
                           </table>
                         </div>
                       </div>

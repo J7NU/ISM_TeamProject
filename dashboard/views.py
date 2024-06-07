@@ -1,6 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.template import loader
+from .models import Fruit,Origin,Inventory,Warehousing,Shipping,Warehouse, User, Barcode
+from .forms import FruitForm,OriginForm,InventoryForm,WarehousingForm,ShippingForm,WarehouseForm, UserForm, BarcodeForm
 
 
 from .api import kamis
@@ -22,11 +24,17 @@ def index(request):
 
 
 def inventory(request):
-    return render(request, 'inventory/inventory_summary.html')
+    inventories = Inventory.objects.all()
+    context = {
+        'inventories': inventories
+    }
+    return render(request, 'inventory/inventory_summary.html',context)
 
 
 def inventory_details(request):
-    return render(request, 'inventory/inventory_item_detail.html')
+    inventories = Inventory.objects.get(id=id)
+    form = InventoryForm(request.POST or None, instance = inventory)
+    return render(request, 'inventory/inventory_item_detail.html',{'form': inventories})
 
 
 def product_setting(request):
@@ -38,15 +46,35 @@ def product_edit(request):
 
 
 def warehousing(request):
-    return render(request, "warehousing/warehousing.html")
+    inventories = Inventory.objects.all()
+    context = {
+        'inventories': inventories
+    }
+    return render(request, "warehousing/warehousing.html",context)
 
 
-def warehousing_edit(request):
-    return render(request, "warehousing/warehousing_edit.html")
+def warehousing_edit(request,id):
+    warehousings = Warehousing.objects.get(warehousing_id=id)
+    form = WarehousingForm(request.POST or None, instance=warehousings)
+    if form.is_valid():
+        form.save()
+        return redirect('warehousing')
+
+    return render(request, "warehousing/warehousing_edit.html",{'form':form,'warehousings':warehousings})
+def warehouseing_delete(request,id):
+    warehousings = Warehousing.objects.get(id=id)
+    if request.method == 'POST':
+        warehousings.delete()
+        return redirect('warehousing')
+    return render(request,"warehousing/warehousing_delete_confirm.html")
 
 
 def shipping(request):
-    return render(request, "shipping/shipping.html")
+    shippings = Shipping.objects.all()
+    context = {
+        'shippings': shippings
+    }
+    return render(request, "shipping/shipping.html",context)
 
 
 def shipping_edit(request):
@@ -54,15 +82,33 @@ def shipping_edit(request):
 
 
 def warehouse(request):
-    return render(request, "warehouse/warehouse.html")
+    warehouses = Warehouse.objects.all()
+    context = {
+        'warehouses': warehouses
+    }
+    return render(request, "warehouse/warehouse.html",context)
 
 
 def warehouse_detail(request):
-    return render(request, "warehouse/warehouse_detail.html")
+    warehouses = Warehouse.objects.get(id=id)
+    form = WarehouseForm(request.POST or None, instance=inventory)
+    return render(request, "warehouse/warehouse_detail.html", {'form': warehouses})
 
 
 def warehouse_edit(request):
+    warehouses = Warehouse.objects.get(id=id)
+    form = WarehouseForm(request.POST or None, instance = warehouses)
+    if form.is_valid():
+        form.save()
+        return redirect('warehouse')
     return render(request, "warehouse/warehouse_detail_edit.html")
+
+def warehouse_delete(request):
+    warehouses = Warehouse.objects.get(id=id)
+    if request.method == 'POST':
+        warehouses.delete()
+        return redirect('warehouse')
+    return render(request, "warehouse/warehouse_delete_confirm.html")
 
 
 def recommend(request):

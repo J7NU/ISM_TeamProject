@@ -11,19 +11,20 @@
                   </tr>
                 </thead>
                 <tbody>
+                  {% for inventories in inventories %}
                   <tr>
-                    <th>00창고</th>
-                    <th>사과</th>
-                    <th>2024-05-10</th>
-                    <th>2024-08-30</th>
-                    <th>100</th>
-                    <th>
+                    <td>{{ inventories.warehouse_id.warehouse_name }}</td>
+                    <td>{{ inventories.fruit_id.fruit_name}}</td>
+                    <td>{{ inventories.warehousing_id.warehousing_time}}</td>
+                    <td>{{ inventories.inventory_expiration }}</td>
+                    <td>{{ inventories.inventory_quantity}}</td>
+                    <td>
                       <a
                         class="btn btn-primary m-1"
                         href="inventory/1"
-                        >Detail</a
-                      >
-                    </th>
+                        >Detail</a>
+                    </td>
                   </tr>
+                {% endfor %}
                 </tbody>
               </table>
