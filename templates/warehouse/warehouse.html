@@ -8,18 +8,21 @@
                 <p><a href="/warehouse" style="text-decoration-line: none">Warehouse</a></p>
                 <h1 class="fw-bold">Warehouse Information(창고 정보)</h1>
               <hr />
-            </div> 
+            </div>
 
             <div class="p-5 pt-5 bg-light">
                 <div class="row">
                     <!-- 창고 추가 화면 -->
+
                     <div class="col-xl-7 col-md-12 mb-4">
                       <div class="card shadow" style="height: 100%;">
                         <div class="card-body">
                           <h3><b>창고 추가</b></h3>
                           <form method="post" class="py-1">
+                              {% csrf_token %}
                             <h5><b>주소</b></h5>
                             <!--주소 입력 받는건 https://developers.kakao.com/docs/latest/ko/local/dev-guide-->
+                              {{ form.warehouse_address }}
                             <div class="row g-3 align-items-center mb-3">
                               <div class="col-8">
                                 <input class="form-control" type="text" disabled>
@@ -34,25 +37,33 @@
                                 <label for="warehouse-name" class="form-label"><b>창고 이름</b></label>
                               </div>
                               <div class="col-auto">
-                                <input type="text" name="warehouse-name" id="warehouse-name" class="form-control">
-                              </div> 
+                                  {{ form.warehouse_name }}
+                              </div>
                             </div>
                             <div class="row g-3 align-items-center mb-3">
                               <div class="col-auto">
                                 <label for="warehouse-capa" class="form-label"><b>창고 용량</b></label>
                               </div>
                               <div class="col-auto ">
-                                <input type="number" step="0.01" name="warehouse-capa" id="warehouse-capa" class="form-control">
-                              </div> 
+                                  {{ form.warehouse_capacity}}
+                              </div>
                               <div class="col-auto">
                                 <span id="passwordHelpInline" class="form-text">
                                   CBM (소수점 둘째자리)
                                 </span>
                               </div>
                             </div>
+                              <div class="row g-3 align-items-center mb-3">
+                              <div class="col-auto">
+                                <label for="warehouse-capa" class="form-label"><b>유저 id</b></label>
+                              </div>
+                              <div class="col-auto ">
+                                  {{ form.user }}
+                              </div>
+                            </div>
                             <div class="d-flex flex-row-reverse">
                               <button type="submit" class="btn btn-success">확인</button>
-                            </div>        
+                            </div>
                           </form>
                         </div>
                       </div>

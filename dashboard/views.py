@@ -47,18 +47,18 @@ def product_edit(request):
 
 def warehousing(request):
     inventories = Inventory.objects.all()
+    form = WarehousingForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        redirect('warehousing')
     context = {
-        'inventories': inventories
+        'inventories': inventories,
+        'form': form
     }
     return render(request, "warehousing/warehousing.html",context)
 
 
-# def create_warehousing(request):
-#     form = WarehousingForm(request.POST or None)
-#     if form.is_valid():
-#         form.save()
-#         return redirect("warehousing")
-#     return render(request,"warehousing/warehousing_form.html",{'form':form})
+
 
 def warehousing_edit(request, id):
     warehousings = Warehousing.objects.get(warehousing_id=id)
@@ -96,16 +96,21 @@ def shipping_edit(request,id):
 
 def warehouse(request):
     warehouses = Warehouse.objects.all()
+    form = WarehouseForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        redirect('warehouse')
     context = {
-        'warehouses': warehouses
+        'warehouses': warehouses,
+        'form' : form
     }
     return render(request, "warehouse/warehouse.html",context)
 
 
 def warehouse_detail(request):
     warehouses = Warehouse.objects.get(id=id)
-    form = WarehouseForm(request.POST or None, instance=inventory)
-    return render(request, "warehouse/warehouse_detail.html", {'form': warehouses})
+    form = WarehouseForm(request.POST or None, instance=warehouses)
+    return render(request, "warehouse/warehouse_detail.html", {'form': form,'warehouse': warehouses})
 
 
 def warehouse_edit(request):

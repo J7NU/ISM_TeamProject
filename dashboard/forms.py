@@ -23,7 +23,8 @@ class InventoryForm(forms.ModelForm):
 class WarehousingForm(forms.ModelForm):
     class Meta:
         model = Warehousing
-        fields = ['warehousing_time','warehousing_quantity','warehousing_price','warehousing_id']
+        fields = ['warehousing_time','warehousing_quantity','warehousing_price','warehousing_id','warehousing_until'
+            ,'warehouse']
 
 
 class ShippingForm(forms.ModelForm):
@@ -35,7 +36,7 @@ class ShippingForm(forms.ModelForm):
 class WarehouseForm(forms.ModelForm):
     class Meta:
         model = Warehouse
-        fields = '__all__'
+        fields = ['warehouse_address','warehouse_name','warehouse_capacity','user']
 
 
 class UserForm(forms.ModelForm):
