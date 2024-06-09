@@ -19,22 +19,22 @@
                           <div class="card-body">
                             <h3><b>상품 입고하기</b></h3>
                                 <!--if 조회된 상품이 없음-->
-                                <form method="POST" class="my-3">
-                                    {% csrf_token %}
-                                  <div class="row g-3 align-items-center mb-3">
-                                    <div class="col-auto">
-                                      <label for="barcodeInput" class="col-form-label"><b>바코드</b></label>
-                                    
-                                    </div>
-                                    <div class="col-8">
-                                      <div class="input-group">
-                                        <input type="text" name="barcode" id="barcodeInput" class="form-control " placeholder="바코드를 스캔하거나 직접 입력하세요."/>
-                                        <button type="submit" class="btn btn-primary" onclick="alert('중품 사과, 원산지:청송')">상품조회</button>
-                                    
-                                      </div> 
-                                    </div> 
-                                  </div> 
-                                </form>
+<!--                                <form method="POST" class="my-3">-->
+<!--                                    {% csrf_token %}-->
+<!--                                  <div class="row g-3 align-items-center mb-3">-->
+<!--                                    <div class="col-auto">-->
+<!--                                      <label for="barcodeInput" class="col-form-label"><b>바코드</b></label>-->
+<!--                                    -->
+<!--                                    </div>-->
+<!--                                    <div class="col-8">-->
+<!--                                      <div class="input-group">-->
+<!--                                        <input type="text" name="barcode" id="barcodeInput" class="form-control " placeholder="바코드를 스캔하거나 직접 입력하세요."/>-->
+<!--                                        <button type="submit" class="btn btn-primary" onclick="alert('중품 사과, 원산지:청송')">상품조회</button>-->
+<!--                                    -->
+<!--                                      </div> -->
+<!--                                    </div> -->
+<!--                                  </div> -->
+<!--                                </form>-->
                                 <!--else-->
                                 <div class="row">
                                   <div class="mb-3"><b>바코드: </b>000000000<br><b>상품명: </b>중품사과</div>
@@ -47,7 +47,7 @@
                                     {% csrf_token %}
                                     <div class="row g-3 align-items-center mb-3">
                                         <div class="col-auto">
-                                            <label for="inbound-time" class="form-label"><b>창고 이름</b></label>
+                                            <label for="warehouse_name" class="form-label"><b>창고 이름</b></label>
                                         </div>
                                         <div class="col-auto">
                                             {{ form.warehouse }}
@@ -61,20 +61,19 @@
                                             {{ form.warehousing_time }}
                                         </div>
                                     </div>
-                                    <div class="row g-3 align-items-center mb-3">
-                                        <div class="col-auto">
-                                            <label for="inbound-time" class="form-label"><b>유통기한</b></label>
-                                        </div>
-                                        <div class="col-auto">
-                                            {{ form.warehousing_until }}
-                                        </div>
-                                    </div>
+<!--                                    <div class="row g-3 align-items-center mb-3">-->
+<!--                                        <div class="col-auto">-->
+<!--                                            <label for="inbound-time" class="form-label"><b>유통기한</b></label>-->
+<!--                                        </div>-->
+<!--                                        <div class="col-auto">-->
+<!--                                            {{ form.warehousing_until }}-->
+<!--                                        </div>-->
+<!--                                    </div>-->
                                   <div class="row g-3 align-items-center mb-3">
                                     <div class="col-auto">
                                       <label for="inbound-quantity" class="form-label"><b>입고 수량</b></label>
                                     </div>
                                     <div class="col-auto">
-
                                         {{ form.warehousing_quantity }}
                                     </div>
                                     <div class="col-auto">
@@ -131,16 +130,16 @@
                               </tr>
                             </thead>
                             <tbody>
-                              {% for inventory in inventories %}
+                              {% for warehousing in warehousings %}
                               <tr>
-                                <th>{{ inventory.warehousing_id}}</th>
-                                <th>{{ inventory.fruit.fruit_name}}</th>
-                                <th>{{ inventory.warehouse_id }}</th>
-                                <th>{{ inventory.warehousing.warehousing_time }}</th>
-                                <th>{{ inventory.inventory_expiration }}</th>
-                                <th>{{ inventory.warehousing.warehousing_price }}</th>
-                                <th>{{ inventory.warehousing.warehousing_quantity }}</th>
-                                <th><a href="{% url 'warehousing_edit' inventory.warehousing_id %}" class="btn btn-outline-primary ">Edit</a></th>
+                                <th>{{ warehousing.warehousing_id}}</th>
+                                <th>{{ warehousing.fruit.fruit_name}}</th>
+                                <th>{{ warehousing.barcode_id }}</th>
+                                <th>{{ warehousing.warehousing_time }}</th>
+                                <th>{{ warehousing.warehousing_until }}</th>
+                                <th>{{ warehousing.warehousing_price }}</th>
+                                <th>{{ warehousing.warehousing_quantity }}</th>
+                                <th><a href="{% url 'warehousing_edit' warehousing.warehousing_id %}" class="btn btn-outline-primary ">Edit</a></th>
 
                                 <th><a href="" class="btn btn-outline-danger ">delete</a></th>
                               </tr>

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Fruit,Origin,Inventory,Warehousing,Shipping,Warehouse, User, Barcode
+from .models import Fruit,Origin,Inventory,Warehousing,Shipping,Warehouse, Barcode
 
 
 class FruitForm(forms.ModelForm):
@@ -23,8 +23,7 @@ class InventoryForm(forms.ModelForm):
 class WarehousingForm(forms.ModelForm):
     class Meta:
         model = Warehousing
-        fields = ['warehousing_time','warehousing_quantity','warehousing_price','warehousing_id','warehousing_until'
-            ,'warehouse']
+        fields = ['warehousing_time','warehousing_quantity','warehousing_price','warehousing_id','warehouse','user']
 
 
 class ShippingForm(forms.ModelForm):
@@ -39,10 +38,7 @@ class WarehouseForm(forms.ModelForm):
         fields = ['warehouse_address','warehouse_name','warehouse_capacity','user']
 
 
-class UserForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = '__all__'
+
 
 class BarcodeForm(forms.ModelForm):
     class Meta:

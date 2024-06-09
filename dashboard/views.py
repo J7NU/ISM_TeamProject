@@ -1,9 +1,11 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.template import loader
-from .models import Fruit,Origin,Inventory,Warehousing,Shipping,Warehouse, User, Barcode
-from .forms import FruitForm,OriginForm,InventoryForm,WarehousingForm,ShippingForm,WarehouseForm, UserForm, BarcodeForm
+from .models import Fruit,Origin,Inventory,Warehousing,Shipping,Warehouse, Barcode,Warehousing_history
+from .forms import FruitForm,OriginForm,InventoryForm,WarehousingForm,ShippingForm,WarehouseForm, BarcodeForm
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+
 
 from .api import kamis
 
@@ -45,29 +47,51 @@ def product_edit(request):
     return render(request, "product/product_edit.html")
 
 
+
+@login_required
 def warehousing(request):
-    inventories = Inventory.objects.all()
+    user = request.user
+    warehousing_histories = Warehousing_history.objects.filter(user=user)
     form = WarehousingForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-        redirect('warehousing')
+
+    if request.method == 'POST':
+        if form.is_valid():
+            warehousing = form.save(commit=False)
+            warehousing.user = user
+            warehousing.save()
+            return redirect('warehousing')
+    else:
+        form = WarehousingForm()
+
+    warehousings = Warehousing.objects.filter(user=user)
+
     context = {
-        'inventories': inventories,
-        'form': form
+        'warehousing_histories': warehousing_histories,
+        'form': form,
+        'warehousings': warehousings
     }
-    return render(request, "warehousing/warehousing.html",context)
+    return render(request, "warehousing/warehousing.html", context)
 
 
 
 
-def warehousing_edit(request, id):
+def warehousing_edit(request,id):
+    user_id = request.user.id
     warehousings = Warehousing.objects.get(warehousing_id=id)
+    warehouses = Warehouse.objects.filter(user_id = user_id)
     form = WarehousingForm(request.POST or None, instance=warehousings)
+    context = {
+        'form': form,
+        'warehousings': warehousings,
+        'warehouses' : warehouses,
+        'user_id': user_id
+    }
     if form.is_valid():
         form.save()
-        messages.success(request, '입고 정보가 수정되었습니다.')
         return redirect('warehousing')
-    return render(request, "warehousing/warehousing_edit.html",{'form':form,'warehousings':warehousings})
+    return render(request, "warehousing/warehousing_edit.html",context)
+
+
 def warehouseing_delete(request,id):
     warehousings = Warehousing.objects.get(id=id)
     if request.method == 'POST':
@@ -96,15 +120,28 @@ def shipping_edit(request,id):
 
 def warehouse(request):
     warehouses = Warehouse.objects.all()
-    form = WarehouseForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-        redirect('warehouse')
-    context = {
-        'warehouses': warehouses,
-        'form' : form
-    }
-    return render(request, "warehouse/warehouse.html",context)
+    if request.method == 'POST':
+        form = WarehouseForm(request.POST)
+        if form.is_valid():
+            warehouse = form.save(commit=False)
+            warehouse.user = request.user
+            warehouse.save()
+            return redirect('warehouse',warehouse.pk)
+    else:
+        form = WarehouseForm()
+        context ={
+            'form':form,
+        }
+        return render(request, "warehouse/warehouse.html", context)
+    # form = WarehouseForm(request.POST or None)
+    # if form.is_valid():
+    #     form.save()
+    #     redirect('warehouse')
+    # context = {
+    #     'warehouses': warehouses,
+    #     'form' : form
+    # }
+
 
 
 def warehouse_detail(request):
