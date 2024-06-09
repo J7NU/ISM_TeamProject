@@ -24,6 +24,9 @@ class Barcode(models.Model):
     origin = models.ForeignKey(Origin, on_delete=models.CASCADE, db_column='origin_id')
     fruit = models.ForeignKey(Fruit, on_delete=models.CASCADE, db_column='fruit_id')
 
+    # def __str__(self):
+    #     return self.barcode_id
+
 class Warehouse(models.Model):
     warehouse_id = models.BigAutoField(primary_key=True)
     warehouse_name = models.CharField(max_length = 100)
@@ -32,6 +35,8 @@ class Warehouse(models.Model):
     warehouse_address = models.CharField(max_length = 200)
     warehouse_capacity = models.IntegerField(default=0)
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE, db_column='user_id')
+    def __str__(self):
+        return self.warehouse_name
 
 
 
@@ -65,13 +70,6 @@ class Inventory(models.Model):
     # def put_expiration(self):
     #   self.inventory_expiration = datetime.now().date() + timedelta(days=self.fruit.id.fruit_day_plus)
 
-class Warehousing_history(models.Model):
-    warehousing_history_id = models.BigAutoField(primary_key=True)
-    warehousing = models.ForeignKey(Warehousing,on_delete=models.CASCADE,db_column='warehousing_id')
-    fruit = models.ForeignKey(Fruit,on_delete=models.CASCADE,db_column='fruit_id')
-    barcode = models.ForeignKey(Barcode,on_delete=models.CASCADE,db_column='barcode_id')
-    inventory = models.ForeignKey(Inventory,on_delete=models.CASCADE,db_column = 'inventory_id')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, db_column='user_id')
 
 
 class Shipping(models.Model):
@@ -79,6 +77,7 @@ class Shipping(models.Model):
     shipping_time = models.DateTimeField(default = timezone.now)
     shipping_quantity = models.IntegerField(default = 0)
     shipping_price = models.IntegerField(default=0)
+    warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE, db_column='warehouse_id')
     barcode = models.ForeignKey(Barcode,on_delete=models.CASCADE,db_column='barcode_id')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, db_column='user_id')
 
