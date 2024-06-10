@@ -5,7 +5,8 @@ from .models import Fruit,Origin,Inventory,Warehousing,Shipping,Warehouse, Barco
 from .forms import FruitForm,OriginForm,InventoryForm,WarehousingForm,ShippingForm,WarehouseForm, BarcodeForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from .api import kamis
 
@@ -26,17 +27,16 @@ def index(request):
 
 
 def inventory(request):
-    inventories = Inventory.objects.all()
+    inventories = Inventory.objects.filter(user = request.user)
     context = {
         'inventories': inventories
     }
     return render(request, 'inventory/inventory_summary.html',context)
 
 
-def inventory_details(request):
-    inventories = Inventory.objects.get(id=id)
-    form = InventoryForm(request.POST or None, instance = inventories)
-    return render(request, 'inventory/inventory_item_detail.html',{'form': form})
+def inventory_details(request,inventory_id):
+    inventories = Inventory.objects.get(inventory_id=inventory_id,user = request.user)
+    return render(request, 'inventory/inventory_item_detail.html',{'inventories': inventories})
 
 
 def product_setting(request):
@@ -58,6 +58,7 @@ def warehousing(request):
             warehousing = form.save(commit=False)
             warehousing.user = user
             warehousing.save()
+            plus_inventory(warehousing)
             return redirect('warehousing')
     else:
         form = WarehousingForm(user)
@@ -116,10 +117,10 @@ def shipping(request):
             shipping = form.save(commit=False)
             shipping.user = user
             shipping.save()
+            minus_inventory(shipping)
             return redirect('shipping')
     else:
         form = ShippingForm(user)
-
     shippings = Shipping.objects.filter(user=user)
     warehouses = Warehouse.objects.filter(user=user)
     context = {
@@ -128,6 +129,40 @@ def shipping(request):
         'warehouses': warehouses
     }
     return render(request, "shipping/shipping.html", context)
+@receiver(post_save, sender=Warehousing)
+def plus_inventory(instance, **kwargs):
+    try:
+        inventory = Inventory.objects.get(
+            warehouse=instance.warehouse,
+            barcode=instance.barcode,
+            user=instance.user
+        )
+        inventory.inventory_quantity += instance.warehousing_quantity
+        inventory.save()
+    except Inventory.DoesNotExist:
+        Inventory.objects.create(
+            warehouse=instance.warehouse,
+            barcode=instance.barcode,
+            user=instance.user,
+            inventory_quantity=instance.warehousing_quantity
+        )
+
+
+@receiver(post_save, sender=Shipping)
+def minus_inventory(instance, **kwargs):
+    try:
+        inventory = Inventory.objects.get(
+            warehouse=instance.warehouse,
+            barcode=instance.barcode,
+            user=instance.user
+        )
+        if inventory.inventory_quantity >= instance.shipping_quantity:
+            inventory.inventory_quantity -= instance.shipping_quantity
+            inventory.save()
+        else:
+            raise ValueError(f"재고가 부족합니다. 현재 재고: {inventory.inventory_quantity}, 출고 수량: {instance.shipping_quantity}")
+    except Inventory.DoesNotExist:
+        raise ValueError("재고 정보가 존재하지 않습니다.")
 
 
 def shipping_edit(request,shipping_id):
@@ -186,9 +221,13 @@ def warehouse(request):
 
 
 def warehouse_detail(request,warehouse_id):
-    warehouses = Warehouse.objects.get(id=id)
-    form = WarehouseForm(request.POST or None, instance=warehouses)
-    return render(request, "warehouse/warehouse_detail.html", {'form': form,'warehouse': warehouses})
+    warehouses = Warehouse.objects.get(warehouse_id=warehouse_id)
+    warehousings = Warehousing.objects.filter(user_id = request.user,warehouse_id = warehouse_id)
+    context = {
+        'warehouse': warehouses,
+        'warehousings' : warehousings
+    }
+    return render(request, "warehouse/warehouse_detail.html", context)
 
 
 def warehouse_edit(request):

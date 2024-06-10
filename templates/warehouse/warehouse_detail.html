@@ -52,14 +52,16 @@
                                   </tr>
                                 </thead>
                                 <tbody>
+                                {%  for warehousing in warehousings %}
                                   <tr>
-                                    <th>0000000000</th>
-                                    <th>중품 사과</th>
-                                    <th>2024-05-10</th>
-                                    <th>2024-08-30</th>
-                                    <th>100</th>
+                                    <th>{{ warehousing.warehousing_id }}</th>
+                                    <th>{{ warehousing.barcode.fruit.fruit_name}}</th>
+                                    <th>{{ warehousing.warehousing_time }}</th>
+                                    <th>{{ warehousing.warehousing_until }}</th>
+                                    <th>{{ warehousing.warehousing_quantity }}</th>
                                     <th><a class="btn btn-primary m-1" href="/inventory/1">Detail</a></th>
                                   </tr>
+                                {% endfor %}
                                 </tbody>
                               </table>
                             </div>

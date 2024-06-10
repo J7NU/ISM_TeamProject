@@ -4,24 +4,20 @@
                   <tr>
                     <th>창고명</th>
                     <th>작물명</th>
-                    <th>보관시작기간</th>
-                    <th>유통기한</th>
                     <th>재고량</th>
                     <th>상세보기</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {% for inventories in inventories %}
+                  {% for inventory in inventories %}
                   <tr>
-                    <td>{{ inventories.warehouse.warehouse_name }}</td>
-                    <td>{{ inventories.fruit.fruit_name}}</td>
-                    <td>{{ inventories.warehousing.warehousing_time}}</td>
-                    <td>{{ inventories.inventory_expiration }}</td>
-                    <td>{{ inventories.inventory_quantity}}</td>
+                    <td>{{ inventory.warehouse.warehouse_name }}</td>
+                    <td>{{ inventory.barcode.fruit.fruit_name}}</td>
+                    <td>{{ inventory.inventory_quantity}}</td>
                     <td>
                       <a
                         class="btn btn-primary m-1"
-                        href="inventory/1"
+                        href="{% url 'inventory-item' inventory.inventory_id %}"
                         >Detail</a>
                     </td>
                   </tr>

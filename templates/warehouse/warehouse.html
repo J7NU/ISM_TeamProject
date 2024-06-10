@@ -104,7 +104,7 @@
                                 <td>{{ warehouse.warehouse_name }}</td>
                                 <td>{{ warehouse.warehouse_address }}</td>
                                 <td>{{ warehouse.warehouse_capacity }}</td>
-                                <td><a href="warehouse/1" class="btn btn-outline-success">Detail</a></td>
+                                <td><a href="{% url 'warehouse_detail' warehouse.warehouse_id %}" class="btn btn-outline-success">Detail</a></td>
                                 <td><a href="warehouse/1/edit" class="btn btn-outline-primary ">Edit</a></td>
                                 <td><a href="{% url 'delete_warehouse' warehouse.warehouse_id %}" class="btn btn-outline-danger ">delete</a></td>
                               </tr>
