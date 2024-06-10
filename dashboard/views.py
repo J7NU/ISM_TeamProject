@@ -98,30 +98,6 @@ def warehousing_edit(request, warehousing_id):
     return render(request, 'warehousing/warehousing_edit.html', context)
 
 
-
-# def warehousing_edit(request, warehousing_id):
-#     user = request.user
-#     warehousings = get_object_or_404(Warehousing, warehousing_id=warehousing_id, user=user)
-#     if request.method == 'POST':
-#         form = WarehousingForm(user, request.POST, instance=warehousing)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('warehousing')
-#     else:
-#         form = WarehousingForm(user, instance=warehousing, initial={'warehousing': warehousings.warehousing_id})
-#
-#     warehousings = Warehousing.objects.filter(user=user)
-#     warehouses = Warehouse.objects.filter(user=user)
-#     context = {
-#         'form': form,
-#         'warehousings': warehousings,
-#         'warehouses': warehouses
-#     }
-#     return render(request, 'warehousing/warehousing_edit.html', context)
-
-
-
-
 def warehouseing_delete(request,id):
     warehousings = Warehousing.objects.get(id=id)
     if request.method == 'POST':
@@ -136,9 +112,9 @@ def shipping(request):
 
     if request.method == 'POST':
         if form.is_valid():
-            shipping_form = form.save(commit=False)
-            shipping_form.user = user
-            shipping_form.save()
+            shipping = form.save(commit=False)
+            shipping.user = user
+            shipping.save()
             return redirect('shipping')
     else:
         form = ShippingForm(user)
@@ -153,20 +129,35 @@ def shipping(request):
     return render(request, "shipping/shipping.html", context)
 
 
-def shipping_edit(request,id):
-    shippings = Shipping.objects.get(shipping_id=id)
-    form = ShippingForm(request.POST or None, instance=shippings)
-    if form.is_valid():
-        form.save()
-        messages.success(request, '입고 정보가 수정되었습니다.')
-        return redirect('shipping')
-    return render(request, "shipping/shipping_edit.html",{'form': form, 'shippings':shippings})
+def shipping_edit(request,shipping_id):
+    user = request.user
+    try:
+        shipping = Shipping.objects.get(shipping_id =shipping_id, user=user)
+    except Shipping.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'POST':
+        form = ShippingForm(user, request.POST, instance=shipping)
+        if form.is_valid():
+            form.save()
+            return redirect('shipping')
+    else:
+        form = ShippingForm(user, instance=shipping, initial={'shipping_id': shipping.shipping_id})
+
+    shippings = Shipping.objects.filter(user=user)
+    warehouses = Warehouse.objects.filter(user=user)
+    context = {
+        'form': form,
+        'shippings': shippings,
+        'warehouses': warehouses
+    }
+    return render(request, 'shipping/shipping_edit.html', context)
 
 
 def warehouse(request):
 
     if request.method == 'POST':
-        form = WarehouseForm(request.POST)
+        form = WarehouseForm(request.user,request.POST)
         if form.is_valid():
             warehouse = form.save(commit=False)
             warehouse.user = request.user
@@ -174,7 +165,7 @@ def warehouse(request):
             return redirect('warehouse')
     else:
         user = request.user
-        form = WarehouseForm()
+        form = WarehouseForm(user)
         warehouses = Warehouse.objects.filter(user_id = user)
         context ={
             'form':form,

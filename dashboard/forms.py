@@ -30,10 +30,8 @@ class WarehousingForm(forms.ModelForm):
 
     class Meta:
         model = Warehousing
-        fields = ['warehousing_time', 'warehousing_quantity', 'warehousing_price', 'warehouse', 'barcode', 'user']
-        widgets = {
-            'user': forms.HiddenInput()
-        }
+        fields = ['warehousing_time', 'warehousing_quantity', 'warehousing_price', 'warehouse', 'barcode']
+
 
     def clean(self):
         cleaned_data = super().clean()
@@ -44,24 +42,34 @@ class WarehousingForm(forms.ModelForm):
 
 
 class ShippingForm(forms.ModelForm):
+    user = forms.ModelChoiceField(queryset=User.objects.all(), required=True)
     class Meta:
         model = Shipping
         fields = ['shipping_price','shipping_quantity','shipping_time',"warehouse",'barcode']
 
     def __init__(self, user, *args, **kwargs):
+        self.user = user
         super().__init__(*args, **kwargs)
         self.fields['warehouse'].queryset = Warehouse.objects.filter(user=user)
-
+    def clean(self):
+        cleaned_data = super().clean()
+        cleaned_data['user'] = self.user
+        return cleaned_data
 
 class WarehouseForm(forms.ModelForm):
     class Meta:
         model = Warehouse
-        fields = ['warehouse_address','warehouse_name','warehouse_capacity']
+        fields = ['warehouse_address','warehouse_name','warehouse_capacity','user']
 
     def __init__(self, user, *args, **kwargs):
+        self.user = user
         super().__init__(*args, **kwargs)
-        self.fields['warehouse'].queryset = Warehouse.objects.filter(user=user)
+        self.fields['warehouse'].queryset = Warehouse.objects.filter(user=self.user)
 
+    def clean(self):
+        cleaned_data = super().clean()
+        self.instance.user = self.user
+        return cleaned_data
 
 
 class BarcodeForm(forms.ModelForm):

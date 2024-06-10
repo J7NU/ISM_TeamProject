@@ -11,12 +11,12 @@ urlpatterns = [
     path("warehousing/edit/<int:warehousing_id>", views.warehousing_edit, name="warehousing_edit"),
 
     path("shipping", views.shipping, name="shipping"),
-    path("shipping/edit/<int:id>", views.shipping_edit, name="shipping_edit"),
+    path("shipping/edit/<int:shipping_id>", views.shipping_edit, name="shipping_edit"),
     
     path("warehouse", views.warehouse, name="warehouse"),
     path("warehouse/1", views.warehouse_detail, name="warehouse_detail"),
     path("warehouse/1/edit", views.warehouse_edit, name="warehouse_edit"),
     
     path("recommend", views.recommend, name="recommend"),
-    path("recommend/detail/1", views.recommend_detail, name="recommend_detail")
+    path("recommend/detail/1", views.recommend_detail, name="recommend_detail"),
 ]
