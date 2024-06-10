@@ -64,7 +64,7 @@ class WarehouseForm(forms.ModelForm):
     def __init__(self, user, *args, **kwargs):
         self.user = user
         super().__init__(*args, **kwargs)
-        self.fields['warehouse'].queryset = Warehouse.objects.filter(user=self.user)
+        # self.fields['warehouse'].queryset = Warehouse.objects.filter(user=user)
 
     def clean(self):
         cleaned_data = super().clean()

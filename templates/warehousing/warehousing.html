@@ -157,7 +157,7 @@
                                 <th>{{ warehousing.warehousing_price }}</th>
                                 <th>{{ warehousing.warehousing_quantity }}</th>
                                 <th><a href="{% url 'warehousing_edit' warehousing.warehousing_id %}" class="btn btn-outline-primary ">Edit</a></th>
-                                <th><a href="" class="btn btn-outline-danger ">delete</a></th>
+                                <th><a href="{% url 'delete_warehousing' warehousing.warehousing_id %}" class="btn btn-outline-danger ">delete</a></th>
                               </tr>
                             {% endfor %}
                             </tbody>

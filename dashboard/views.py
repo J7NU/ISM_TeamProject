@@ -98,12 +98,13 @@ def warehousing_edit(request, warehousing_id):
     return render(request, 'warehousing/warehousing_edit.html', context)
 
 
-def warehouseing_delete(request,id):
-    warehousings = Warehousing.objects.get(id=id)
+def warehouseing_delete(request,warehousing_id):
+    user = request.user
+    warehousings = Warehousing.objects.get(warehousing_id=warehousing_id, user=user)
     if request.method == 'POST':
         warehousings.delete()
         return redirect('warehousing')
-    return render(request,"warehousing/warehousing_delete_confirm.html")
+    return render(request,"warehousing/warehousing_delete_confirm.html",{'warehousings':warehousings,'user':user})
 
 @login_required
 def shipping(request):
@@ -153,6 +154,15 @@ def shipping_edit(request,shipping_id):
     }
     return render(request, 'shipping/shipping_edit.html', context)
 
+def shipping_delete(request,shipping_id):
+    user = request.user
+    shippings = Shipping.objects.get(shipping_id=shipping_id, user=user)
+    if request.method == 'POST':
+        shippings.delete()
+        return redirect('shipping')
+    return render(request,"shipping/shipping_delete_confirm.html",{'shippings':shippings,'user':user})
+
+
 
 def warehouse(request):
 
@@ -160,7 +170,7 @@ def warehouse(request):
         form = WarehouseForm(request.user,request.POST)
         if form.is_valid():
             warehouse = form.save(commit=False)
-            warehouse.user = request.user
+            warehouse.user = request.user.id
             warehouse.save()
             return redirect('warehouse')
     else:
@@ -175,7 +185,7 @@ def warehouse(request):
 
 
 
-def warehouse_detail(request):
+def warehouse_detail(request,warehouse_id):
     warehouses = Warehouse.objects.get(id=id)
     form = WarehouseForm(request.POST or None, instance=warehouses)
     return render(request, "warehouse/warehouse_detail.html", {'form': form,'warehouse': warehouses})
@@ -189,12 +199,13 @@ def warehouse_edit(request):
         return redirect('warehouse')
     return render(request, "warehouse/warehouse_detail_edit.html")
 
-def warehouse_delete(request):
-    warehouses = Warehouse.objects.get(id=id)
+def warehouse_delete(request,warehouse_id):
+    user = request.user
+    Warehouses = Warehouse.objects.get(warehouse_id=warehouse_id, user=user)
     if request.method == 'POST':
-        warehouses.delete()
-        return redirect('warehouse')
-    return render(request, "warehouse/warehouse_delete_confirm.html")
+        Warehouses.delete()
+        return redirect('warehousing')
+    return render(request, "warehousing/warehousing_delete_confirm.html", {'Warehouses': Warehouses, 'user': user})
 
 
 def recommend(request):

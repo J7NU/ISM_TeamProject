@@ -154,7 +154,7 @@
                                 <th>{{ shipping.shipping_price}}</th>
                                 <th>{{ shipping.shipping_quantity }}</th>
                                 <th><a href="{% url 'shipping_edit' shipping.shipping_id %}" class="btn btn-outline-primary ">Edit</a></th>
-                                <th><a href="" class="btn btn-outline-danger ">delete</a></th>
+                                <th><a href="{% url 'delete_shipping' shipping.shipping_id %}" class="btn btn-outline-danger ">delete</a></th>
                               </tr>
                             {% endfor %}
                             </tbody>

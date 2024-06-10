@@ -21,8 +21,6 @@
                           <form method="post" class="py-1">
                               {% csrf_token %}
                             <h5><b>주소</b></h5>
-                            <!--주소 입력 받는건 https://developers.kakao.com/docs/latest/ko/local/dev-guide-->
-                              {{ form.warehouse_address }}
                             <div class="row g-3 align-items-center mb-3">
                               <div class="col-8">
                                 <input class="form-control" type="text" disabled>
@@ -108,7 +106,7 @@
                                 <td>{{ warehouse.warehouse_capacity }}</td>
                                 <td><a href="warehouse/1" class="btn btn-outline-success">Detail</a></td>
                                 <td><a href="warehouse/1/edit" class="btn btn-outline-primary ">Edit</a></td>
-                                <td><a href="" class="btn btn-outline-danger ">delete</a></td>
+                                <td><a href="{% url 'delete_warehouse' warehouse.warehouse_id %}" class="btn btn-outline-danger ">delete</a></td>
                               </tr>
 
                                 {% endfor %}
