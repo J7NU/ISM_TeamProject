@@ -75,5 +75,5 @@ class WarehouseForm(forms.ModelForm):
 class BarcodeForm(forms.ModelForm):
     class Meta:
         model = Barcode
-        fields = '__all__'
+        fields = ['barcode_num','fruit','origin']
 

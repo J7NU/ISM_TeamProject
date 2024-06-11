@@ -12,6 +12,8 @@ class Fruit(models.Model):
     fruit_id = models.BigAutoField(primary_key=True)
     fruit_name = models.CharField(max_length=50)
     fruit_plus_day = models.IntegerField(default=0)
+    def __str__(self):
+        return self.fruit_name
 
 
 
@@ -23,8 +25,10 @@ class Origin(models.Model):
     origin_latitude = models.CharField(max_length =200)
 class Barcode(models.Model):
     barcode_id = models.BigAutoField(primary_key=True)
+    barcode_num = models.IntegerField(default=0)
     origin = models.ForeignKey(Origin, on_delete=models.CASCADE, db_column='origin_id')
     fruit = models.ForeignKey(Fruit, on_delete=models.CASCADE, db_column='fruit_id')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, db_column='user_id')
 
 
 class Warehouse(models.Model):

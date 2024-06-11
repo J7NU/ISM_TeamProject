@@ -2,7 +2,7 @@
 <body>
 <form method="POST">
     {% csrf_token %}
-    <h2>Are you sure to remove {{ warehousings.warehousing }}</h2>
+    <h2>{{ warehousings.warehousing }}을(를) 정말 삭제하시겠습니까?</h2>
     <button class="btn btn-danger" type="submit">Delete</button>
     <button onclick="window.history.back();" class="btn btn-default" type="button">Cancel</button>
 </form>

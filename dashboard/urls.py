@@ -6,7 +6,8 @@ urlpatterns = [
     path("inventory", views.inventory, name="inventory"),
     path("inventory/<int:inventory_id>", views.inventory_details, name='inventory-item'),
     path("product", views.product_setting, name='product-setting'),
-    path("product/edit/1", views.product_edit, name='product-edit'),
+    path("product/edit/<int:barcode_id>", views.product_edit, name='product-edit'),
+    path("product/delete/<int:barcode_id>",views.product_delete, name='product-delete'),
     path("warehousing", views.warehousing, name='warehousing'),
     path("warehousing/edit/<int:warehousing_id>", views.warehousing_edit, name="warehousing_edit"),
     path("warehousing/delete/<int:warehousing_id>",views.warehouseing_delete,name="delete_warehousing"),
@@ -17,7 +18,7 @@ urlpatterns = [
     
     path("warehouse", views.warehouse, name="warehouse"),
     path("warehouse/<int:warehouse_id>", views.warehouse_detail, name="warehouse_detail"),
-    path("warehouse/edit/<int:id>", views.warehouse_edit, name="warehouse_edit"),
+    path("warehouse/edit/<int:warehouse_id>", views.warehouse_edit, name="warehouse_edit"),
     path("warehouse/delete/<int:warehouse_id>",views.warehouse_delete,name="delete_warehouse"),
     
     path("recommend", views.recommend, name="recommend"),

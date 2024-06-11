@@ -17,11 +17,12 @@ def index(request):
     retail_price = kamis.data_for_graph()
     print("소매 데이터 가져오기 성공")
     print(retail_price)
-
+    inventories = Inventory.objects.filter(user = request.user)
     temp = loader.get_template('index.html')
     context = {
         "retail_price": retail_price[1],
-        "retail_date": retail_price[0]
+        "retail_date": retail_price[0],
+        'inventories':inventories,
     }
     return HttpResponse(temp.render(context, request))
 
@@ -40,11 +41,56 @@ def inventory_details(request,inventory_id):
 
 
 def product_setting(request):
-    return render(request, 'product/product_setting.html')
+    user = request.user
+    form = BarcodeForm(request.POST or None)
 
+    if request.method == 'POST':
+        if form.is_valid():
+            barcode = form.save(commit=False)
+            barcode.user = user
+            barcode.save()
+            return redirect('product-setting')
 
-def product_edit(request):
-    return render(request, "product/product_edit.html")
+    fruits = Fruit.objects.all()
+    barcodes = Barcode.objects.filter(user=user)
+    origins = Origin.objects.all()
+    context = {
+        'form': form,
+        'barcodes': barcodes,
+        'fruits': fruits,
+        'origins': origins
+    }
+    return render(request, 'product/product_setting.html', context)
+
+def product_delete(request,barcode_id):
+    user = request.user
+    barcodes = Barcode.objects.get(barcode_id=barcode_id, user=user)
+    if request.method == 'POST':
+        barcodes.delete()
+        return redirect('product')
+    return render(request, "product/product_delete_confirm.html", {'barcodes': barcodes, 'user': user})
+
+def product_edit(request, barcode_id):
+    user = request.user
+    barcode = get_object_or_404(Barcode, barcode_id=barcode_id, user=user)
+
+    if request.method == 'POST':
+        form = BarcodeForm(request.POST, instance=barcode)
+        if form.is_valid():
+            form.save()
+            return redirect('product')
+    else:
+        form = BarcodeForm(instance=barcode)
+
+    fruits = Fruit.objects.all()
+    origins = Origin.objects.all()
+    context = {
+        'form': form,
+        'fruits': fruits,
+        'origins': origins
+    }
+    return render(request, 'product/product-edit.html', context)
+
 
 
 
@@ -230,13 +276,32 @@ def warehouse_detail(request,warehouse_id):
     return render(request, "warehouse/warehouse_detail.html", context)
 
 
-def warehouse_edit(request):
-    warehouses = Warehouse.objects.get(id=id)
-    form = WarehouseForm(request.POST or None, instance = warehouses)
-    if form.is_valid():
-        form.save()
-        return redirect('warehouse')
-    return render(request, "warehouse/warehouse_detail_edit.html")
+def warehouse_edit(request,warehouse_id):
+    user = request.user
+    try:
+        warehouse = Warehouse.objects.get(warehouse_id=warehouse_id, user=user)
+    except Warehouse.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'POST':
+        form = WarehouseForm(user, request.POST, instance=warehouse)
+        if form.is_valid():
+            form.save()
+            return redirect('warehouse')
+    else:
+        form = WarehouseForm(user, instance=warehouse, initial={'warehouse_id': warehouse.warehouse_id})
+    warehouses = Warehouse.objects.filter(user=user)
+    context = {
+        'form': form,
+        'warehouses': warehouses,
+    }
+    return render(request, 'warehouse/warehouse_detail_edit.html', context)
+    # warehouses = Warehouse.objects.get(warehouse_id=warehouse_id)
+    # form = WarehouseForm(request.POST or None, instance = warehouses)
+    # if form.is_valid():
+    #     form.save()
+    #     return redirect('warehouse')
+    # return render(request, "warehouse/warehouse_detail_edit.html")
 
 def warehouse_delete(request,warehouse_id):
     user = request.user
