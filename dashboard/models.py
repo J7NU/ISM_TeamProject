@@ -30,8 +30,8 @@ class Barcode(models.Model):
     origin = models.ForeignKey(Origin, on_delete=models.CASCADE, db_column='origin_id')
     fruit = models.ForeignKey(Fruit, on_delete=models.CASCADE, db_column='fruit_id')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, db_column='user_id')
-    def __int__(self):
-        return self.barcode_id
+    def __str__(self):
+        return str(self.barcode_id)
 
 
 class Warehouse(models.Model):
