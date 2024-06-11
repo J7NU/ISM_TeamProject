@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block main-content %}
+        <main>
+          <!--Dash Title-->
+          <div class="container-fluid">
+            <div class="px-3 py-4">
+              <p><a href="/inventory" style="text-decoration-line: none">Origin</a> / <a href="#" style="text-decoration-line: none">Origin Edit</a></p>
+              <h1 class="fw-bold">Origin Edit (생산지 정보 수정)</h1>
+              <hr />
+              <p>기존 입력했던 입고 정보를 수정하세요.</p>
+              <a href="/origin" class="mt-2 btn btn-outline-secondary"><i class="fa-solid fa-backward"></i> back</a>
+            </div>
+
+            <div class="p-5 pt-5 bg-light">
+              <div class="row">
+                <!-- 입고 수정 화면 -->
+                <div class="col-12">
+                  <div class="card mb-4 shadow">
+                    <div class="card-header"><i class="fas fa-chart-bar me-1"></i>생산지정보 수정</div>
+                    <div class="card-body">
+                      <!-- if 바코드수정 is clicked -->
+                      <!-- if not clicked "바코드수정" -->
+                      <div class="row">
+</div>
+
+<!-- 변경 내용 Form (내용은 미리 입력 되어있음) -->
+<form method="POST" class="py-1">
+
+    {% csrf_token %}
+    <h5><b>주소</b></h5>
+    <div class="row g-3 align-items-center mb-3">
+        <div class="col-8">
+            <input class="form-control" type="text" disabled>
+        </div>
+        <div class="col-auto">
+            <a href="" class="btn btn-outline-primary">주소 검색</a>
+        </div>
+    </div>
+    <div class="row g-3 align-items-center mb-3">
+        <div class="col-auto">
+            <label for="barcode_name" class="form-label"><b>생산지 이름 입력</b></label>
+        </div>
+        <div class="col-auto">
+            {{ form.origin_location }}
+        </div>
+    </div>
+    <div class="d-flex flex-row-reverse">
+        <button type="submit" class="btn btn-success">수정 완료</button>
+    </div>
+</form>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+{% endblock %}

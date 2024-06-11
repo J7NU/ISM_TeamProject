@@ -20,17 +20,40 @@
                             </div>
                             <div class="card-body">
                                 <!-- 여기 Form이랑 product_setting.html의 form이랑 같은 놈입니다.-->
-                                <form>
-                                    <label for="selectFruit" class="form-label">과일 선택</label>
-                                    <select class="form-select mb-2" name="" id="selectFruit">
-                                      <option selected>과일을 선택하세요</option>
-                                      <option value="apple">사과</option>
-                                      <option value="pear">배</option>
-                                    </select>
-                                    <label for="barcodeInput" class="form-label">바코드</label>
-                                    <input type="text" name="barcode" id="barcodeInput" class="form-control mb-4" />
-                                    <button type="submit" class="btn btn-primary">입력</button>
-                                  </form>
+                                <form method="POST" class="py-1">
+                                    {% csrf_token %}
+                                    <div class="row g-3 align-items-center mb-3">
+                                        <div class="col-auto">
+                                            <label class="form-label"><b>과일선택</b></label>
+                                        </div>
+                                        <div class="col-auto">
+                                            {{ form.fruit }}
+                                        </div>
+                                    </div>
+                                    <div class="row g-3 align-items-center mb-3">
+                                        <div class="col-auto">
+                                            <label class="form-label"><b>원산지</b></label>
+                                        </div>
+                                        <div class="col-auto">
+                                            {{ form.origin }}
+                                        </div>
+                                        <div class="col-auto">
+                                            <label class="form-label"><b>바코드</b></label>
+                                        </div>
+                                        <div class="col-auto">
+                                            {{ form.barcode_id }}
+                                        </div>
+                                    </div>
+                                    <div class="row g-3 align-items-center mb-3" style="display:none">
+                                        <div class="col-auto">
+                                            <label for="user" class="form-label"><b>사용자 id</b></label>
+                                        </div>
+                                        <input type="hidden" name="user" value="{{ request.user.id }}">
+                                    </div>
+                                    <div class="d-flex flex-row-reverse">
+                                        <button type="submit" class="btn btn-success">수정 완료</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>

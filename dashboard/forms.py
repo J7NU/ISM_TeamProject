@@ -12,7 +12,7 @@ class FruitForm(forms.ModelForm):
 class OriginForm(forms.ModelForm):
     class Meta:
         model = Origin
-        fields = '__all__'
+        fields = ['origin_location','origin_address']
 
 
 class InventoryForm(forms.ModelForm):
@@ -59,7 +59,7 @@ class ShippingForm(forms.ModelForm):
 class WarehouseForm(forms.ModelForm):
     class Meta:
         model = Warehouse
-        fields = ['warehouse_address','warehouse_name','warehouse_capacity','user']
+        fields = ['warehouse_address','warehouse_name','warehouse_capacity']
 
     def __init__(self, user, *args, **kwargs):
         self.user = user
@@ -75,5 +75,6 @@ class WarehouseForm(forms.ModelForm):
 class BarcodeForm(forms.ModelForm):
     class Meta:
         model = Barcode
-        fields = ['barcode_num','fruit','origin']
+        fields = ['barcode_id','fruit','origin']
+
 

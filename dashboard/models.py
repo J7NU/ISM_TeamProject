@@ -23,9 +23,10 @@ class Origin(models.Model):
     origin_address = models.CharField(max_length = 200)
     origin_longitude = models.CharField(max_length =200)
     origin_latitude = models.CharField(max_length =200)
+    def __str__(self):
+        return self.origin_location
 class Barcode(models.Model):
-    barcode_id = models.BigAutoField(primary_key=True)
-    barcode_num = models.IntegerField(default=0)
+    barcode_id = models.IntegerField(primary_key=True)
     origin = models.ForeignKey(Origin, on_delete=models.CASCADE, db_column='origin_id')
     fruit = models.ForeignKey(Fruit, on_delete=models.CASCADE, db_column='fruit_id')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, db_column='user_id')

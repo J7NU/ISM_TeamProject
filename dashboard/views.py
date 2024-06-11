@@ -49,7 +49,7 @@ def product_setting(request):
             barcode = form.save(commit=False)
             barcode.user = user
             barcode.save()
-            return redirect('product-setting')
+            return redirect('product_setting')
 
     fruits = Fruit.objects.all()
     barcodes = Barcode.objects.filter(user=user)
@@ -67,29 +67,62 @@ def product_delete(request,barcode_id):
     barcodes = Barcode.objects.get(barcode_id=barcode_id, user=user)
     if request.method == 'POST':
         barcodes.delete()
-        return redirect('product')
+        return redirect('product_setting')
     return render(request, "product/product_delete_confirm.html", {'barcodes': barcodes, 'user': user})
 
+# dashboard/views.py
+
 def product_edit(request, barcode_id):
-    user = request.user
-    barcode = get_object_or_404(Barcode, barcode_id=barcode_id, user=user)
+    barcode = get_object_or_404(Barcode, barcode_id=barcode_id)
 
     if request.method == 'POST':
         form = BarcodeForm(request.POST, instance=barcode)
         if form.is_valid():
             form.save()
-            return redirect('product')
+            return redirect('product_setting')
     else:
         form = BarcodeForm(instance=barcode)
 
     fruits = Fruit.objects.all()
     origins = Origin.objects.all()
+
     context = {
         'form': form,
         'fruits': fruits,
-        'origins': origins
+        'origins': origins,
     }
-    return render(request, 'product/product-edit.html', context)
+    return render(request, 'product/product_edit.html', context)
+
+def origin_setting(request):
+    form = OriginForm(request.POST or None)
+    origins = Origin.objects.all()
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            return redirect('origin_setting')
+    return render(request, 'origin/origin_setting.html', {'form':form,'origins':origins})
+
+def origin_delete(request,origin_id):
+    origins = Origin.objects.get(origin_id=origin_id)
+    if request.method == 'POST':
+        origins.delete()
+        return redirect('origin_setting')
+    return render(request, "origin/origin_delete_confirm.html", {'origins': origins})
+
+# dashboard/views.py
+
+def origin_edit(request, origin_id):
+    origins = get_object_or_404(Origin, origin_id=origin_id)
+    if request.method == 'POST':
+        form = OriginForm(request.POST, instance=origins)
+        if form.is_valid():
+            form.save()
+            return redirect('origin_setting')
+    else:
+        form = OriginForm(instance=origins)
+    return render(request, 'origin/origin_edit.html', {'form':form,'origins':origins})
+
+
 
 
 
