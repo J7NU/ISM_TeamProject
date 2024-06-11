@@ -5,8 +5,8 @@ from .models import Fruit,Origin,Inventory,Warehousing,Shipping,Warehouse, Barco
 from .forms import FruitForm,OriginForm,InventoryForm,WarehousingForm,ShippingForm,WarehouseForm, BarcodeForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+from datetime import datetime, timedelta
+
 
 from .api import kamis
 
@@ -138,6 +138,7 @@ def warehousing(request):
             warehousing.user = user
             warehousing.save()
             plus_inventory(warehousing)
+            put_warehousing_until(warehousing)
             return redirect('warehousing')
     else:
         form = WarehousingForm(user)
@@ -208,7 +209,7 @@ def shipping(request):
         'warehouses': warehouses
     }
     return render(request, "shipping/shipping.html", context)
-@receiver(post_save, sender=Warehousing)
+
 def plus_inventory(instance, **kwargs):
     try:
         inventory = Inventory.objects.get(
@@ -227,7 +228,6 @@ def plus_inventory(instance, **kwargs):
         )
 
 
-@receiver(post_save, sender=Shipping)
 def minus_inventory(instance, **kwargs):
     try:
         inventory = Inventory.objects.get(
@@ -242,6 +242,11 @@ def minus_inventory(instance, **kwargs):
             raise ValueError(f"재고가 부족합니다. 현재 재고: {inventory.inventory_quantity}, 출고 수량: {instance.shipping_quantity}")
     except Inventory.DoesNotExist:
         raise ValueError("재고 정보가 존재하지 않습니다.")
+def put_warehousing_until(instance,**kwargs):
+    instance.warehousing_until = instance.warehousing_time + timedelta(days = instance.barcode.fruit.fruit_plus_day)
+    instance.save()
+
+
 
 
 def shipping_edit(request,shipping_id):

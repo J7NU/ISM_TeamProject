@@ -55,13 +55,6 @@ class Warehousing(models.Model):
     warehousing_until = models.DateTimeField(default=timezone.now)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, db_column='user_id')
 
-    def put_warehousing_until(self):
-        if self.barcode.fruit.fruit_plus_day:
-            self.warehousing_until = self.warehousing_time + timedelta(days=self.barcode.fruit.fruit_plus_day)
-            super().save(self)
-        else:
-            self.warehousing_until = self.warehousing_time
-        return self.warehousing_until
 
 class Shipping(models.Model):
     shipping_id = models.BigAutoField(primary_key=True)
