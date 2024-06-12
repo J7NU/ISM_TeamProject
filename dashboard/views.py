@@ -4,8 +4,8 @@ from django.template import loader
 from .models import Fruit,Origin,Inventory,Warehousing,Shipping,Warehouse, Barcode
 from .forms import FruitForm,OriginForm,InventoryForm,WarehousingForm,ShippingForm,WarehouseForm, BarcodeForm
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta
+from django.contrib.auth.decorators import login_required
 
 
 from .api import kamis
@@ -17,7 +17,7 @@ def index(request):
     retail_price = kamis.data_for_graph()
     print("소매 데이터 가져오기 성공")
     print(retail_price)
-    inventories = Inventory.objects.filter(user = request.user)
+    inventories = Inventory.objects.all()
     temp = loader.get_template('index.html')
     context = {
         "retail_price": retail_price[1],
@@ -39,7 +39,7 @@ def inventory_details(request,inventory_id):
     inventories = Inventory.objects.get(inventory_id=inventory_id,user = request.user)
     return render(request, 'inventory/inventory_item_detail.html',{'inventories': inventories})
 
-
+@login_required
 def product_setting(request):
     user = request.user
     form = BarcodeForm(request.POST or None)
@@ -73,12 +73,17 @@ def product_delete(request,barcode_id):
 # dashboard/views.py
 
 def product_edit(request, barcode_id):
+    user = request.user
     barcode = get_object_or_404(Barcode, barcode_id=barcode_id)
+    barcodes = Barcode.objects.get(barcode_id=barcode_id, user=user)
 
     if request.method == 'POST':
         form = BarcodeForm(request.POST, instance=barcode)
         if form.is_valid():
-            form.save()
+            barcode = form.save(commit=False)
+            barcode.user = user
+            barcodes.delete()
+            barcode.save()
             return redirect('product_setting')
     else:
         form = BarcodeForm(instance=barcode)
@@ -92,6 +97,7 @@ def product_edit(request, barcode_id):
         'origins': origins,
     }
     return render(request, 'product/product_edit.html', context)
+
 
 def origin_setting(request):
     form = OriginForm(request.POST or None)

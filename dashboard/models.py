@@ -26,12 +26,12 @@ class Origin(models.Model):
     def __str__(self):
         return self.origin_location
 class Barcode(models.Model):
-    barcode_id = models.IntegerField(primary_key=True)
+    barcode_id = models.CharField(primary_key=True,max_length=50)
     origin = models.ForeignKey(Origin, on_delete=models.CASCADE, db_column='origin_id')
     fruit = models.ForeignKey(Fruit, on_delete=models.CASCADE, db_column='fruit_id')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, db_column='user_id')
     def __str__(self):
-        return str(self.barcode_id)
+        return self.barcode_id
 
 
 class Warehouse(models.Model):
